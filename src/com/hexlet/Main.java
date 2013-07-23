@@ -11,8 +11,9 @@ public class Main {
     private static final char CHAR_0 = '0';
 
     private static boolean nextStepPlayer = false;
-    private static boolean charOfPlayerX = false;
-    private static boolean finish;
+    public static char charOfPlayer;
+    public static char charOfOpponent;
+    private static boolean finish = false;
 
 
 
@@ -22,44 +23,64 @@ public class Main {
         System.out.println("Игра «Крестики-Нолики»");
         System.out.println();
 
-        /* Необходимо реализовить ввод размера поля */
-        //System.out.println("Введите размер поля и нажминте Enter");
-
-        Field field = new Field(3);
-        finish = false;
+        Field field = new Field();
         System.out.println();
 
         System.out.print("Жеребьевка: ");
         nextStepPlayer = Toss.Random();
-        charOfPlayerX = Toss.Random();
+        if (Toss.Random()) {
+            charOfPlayer = CHAR_X;
+            charOfOpponent = CHAR_0;
+        } else {
+            charOfPlayer = CHAR_0;
+            charOfOpponent = CHAR_X;
+        }
         printWhoNextStep();
         System.out.println();
 
 
         while (!finish) {
 
+            if (field.checkTie(field) == 0) {
+                System.out.print("Ничья!");
+                finish = true;
+                break;
+            }   else {
 
-            if (nextStepPlayer) {
-                field.printField();
-                System.out.println("Ваш ход, введите номер ячейки");
-                int numberField = inputFieldNumber()-1;
-                if (checkFieldsNumber(numberField, field)) {
-                    if (charOfPlayerX) {
-                        field.setCharToField(numberField,CHAR_X);
-                    } else {
-                        field.setCharToField(numberField,CHAR_0);
+                if (nextStepPlayer) {
+
+                    //Ход игрока
+                    field.printField();
+
+                    //while ожидает верногономера ячейки
+                    while (true) {
+                    System.out.println("Ваш ход, введите номер ячейки");
+                    int numberField = inputFieldNumber()-1;
+                        if (Field.checkFieldsNumber(numberField, field)) {
+                            field.setCharToField(numberField,charOfPlayer);
+                            break;
+                        }
+                    }
+
+                    if (field.checkWin() != -1) {
+                        field.printField();
+                        System.out.print("Победа: Игрока");
+                        finish = true;
+                    }   else {
+                        System.out.println("Переход хода");
+                        setNextStep();
+                    }
+
+                }   else {
+                    Opponent.step(field);
+                    if (field.checkWin() != -1) {
+                        field.printField();
+                        System.out.print("Победа: Оппонента");
+                        finish = true;
+                    }   else {
+                        setNextStep();
                     }
                 }
-                field.printField();
-                if (field.checkWin() != 0) {
-                    System.out.print(field.checkWin());    // Номер выйгрышной комбинации 3х3
-                }   else {
-                    setNextStep();
-                }
-
-            }   else {
-                Opponent.step(field);
-                break;
             }
         }
     }
@@ -104,15 +125,7 @@ public class Main {
         return 0;
     }
 
-    private static boolean checkFieldsNumber(int fieldNumber, Field field) {
 
-        if (fieldNumber >= 0 && fieldNumber < field.numberOfFields()) {
-            return true;
-        }   else {
-            return false;
-        }
-
-    }
 
 
 }

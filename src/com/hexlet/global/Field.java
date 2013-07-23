@@ -6,8 +6,8 @@ public class Field {
     private static final int MIN_FIELD_SIZE = 3;
     private static final int MAX_FIELD_SIZE = 10;
     private static final int DEFAULT_FIELD_SIZE = 3;
-    private static final char DEFAULT_CHAR = '+';
-    private static final int[][] winCombinations = new int[][] {
+    public static final char DEFAULT_CHAR = ' ';
+    public static final int[][] winCombinations = new int[][] {
             {0, 1, 2}, {3, 4, 5}, {6, 7, 8},                        //Горизонтальные комбинации
             {0, 3, 6}, {1, 4, 7}, {2, 5, 8},                        //Вертикальные комбинации
             {0, 4, 8}, {2, 4, 6}                                    //Диагональные комбинации
@@ -76,23 +76,79 @@ public class Field {
         return fields[number/currectFieldSize] [number%currectFieldSize];
     }
 
+    public boolean isFree (int number) {
+        if (getCharToField(number) == DEFAULT_CHAR) {
+            return true;
+        }   else {
+            return false;
+        }
 
-    //ОШИБКА в проверке
+    }
+
+
     public int checkWin () {
 
-        for (int i=0; i < 8; i++)
+        for (int i=0; i < winCombinations.length; i++)
         {
             if (getCharToField(winCombinations[i][0]) == getCharToField(winCombinations[i][1]) &&
                 getCharToField(winCombinations[i][0]) == getCharToField(winCombinations[i][2]) &&
                 getCharToField(winCombinations[i][0]) != ' ') {
                 return i;
-
         }
         }
 
-        return 0;
+        return -1;
     }
 
+    public int[] countCharCell(char currectChar) {
 
+        int countLine;
+        int countEmpty;
+        int[] count = new int [winCombinations.length];
+        for (int i=0; i<winCombinations.length;i++)
+        {
+            countLine = 0;
+            countEmpty = 0;
+            for (int j=0; j<winCombinations[0].length; j++)  {
+                if (getCharToField(winCombinations[i][j]) == currectChar)
+                {
+                    countLine++;
+                }
+                if (getCharToField(winCombinations[i][j]) == DEFAULT_CHAR){
+                    countEmpty++;
+                }
+            }
+            if (countEmpty == 1)
+            {
+                count[i] = countLine;
+            } else {
+                count[i] = 0;
+            }
+        }
+
+            return count;
+    }
+
+    public static boolean checkFieldsNumber(int fieldNumber, Field field) {
+
+        if (fieldNumber >= 0 && fieldNumber < field.numberOfFields() && field.isFree(fieldNumber)) {
+            return true;
+        }   else {
+            return false;
+        }
+
+    }
+
+    public static int checkTie (Field field) {
+
+        int countFreeCell=0;
+        for (int i=0; i<field.numberOfFields(); i++) {
+            if (field.getCharToField(i) == DEFAULT_CHAR) {
+                countFreeCell++;
+            }
+        }
+
+        return countFreeCell;
+    }
 
 }
