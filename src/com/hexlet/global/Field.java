@@ -33,8 +33,7 @@ public class Field {
 
     public void printField() {
         printFieldLineHor();
-        for (int i=0;i <fields.length;i++)
-        {
+        for (int i = 0; i < fields.length; i++) {
             System.out.print('|');
             for (int j=0; j<fields.length;j++) {
                 System.out.print(" " + fields[i][j] + " |");
@@ -42,6 +41,10 @@ public class Field {
 
             printFieldLineHor();
         }
+    }
+
+    public int getFieldLenth() {
+        return fields.length;
     }
 
     private void printFieldLineHor() {
@@ -56,8 +59,7 @@ public class Field {
     }
 
     public  void resetField() {
-        for (int i=0;i <fields.length;i++)
-        {
+        for (int i = 0 ; i < fields.length ; i++) {
             for (int j=0; j<fields.length;j++) {
                 fields[i][j] = DEFAULT_CHAR;
             }
@@ -69,26 +71,25 @@ public class Field {
     }
 
     public void setCharToField (int number, char charOfField) {
-        fields[number/currectFieldSize] [number%currectFieldSize] = charOfField;
+        int row = number / currectFieldSize;
+        int column = number%currectFieldSize;
+        fields[row] [column] = charOfField;
     }
 
     public char getCharToField (int number) {
-        return fields[number/currectFieldSize] [number%currectFieldSize];
+        int row = number / currectFieldSize;
+        int column = number%currectFieldSize;
+        return fields[row] [column];
     }
 
     public boolean isFree (int number) {
-        if (getCharToField(number) == DEFAULT_CHAR) {
-            return true;
-        }   else {
-            return false;
-        }
-
+        return (getCharToField(number) == DEFAULT_CHAR);
     }
 
 
     public int checkWin () {
 
-        for (int i=0; i < winCombinations.length; i++)
+        for (int i = 0 ; i < winCombinations.length ; i++)
         {
             if (getCharToField(winCombinations[i][0]) == getCharToField(winCombinations[i][1]) &&
                 getCharToField(winCombinations[i][0]) == getCharToField(winCombinations[i][2]) &&
@@ -131,11 +132,7 @@ public class Field {
 
     public static boolean checkFieldsNumber(int fieldNumber, Field field) {
 
-        if (fieldNumber >= 0 && fieldNumber < field.numberOfFields() && field.isFree(fieldNumber)) {
-            return true;
-        }   else {
-            return false;
-        }
+       return (fieldNumber >= 0 && fieldNumber < field.numberOfFields() && field.isFree(fieldNumber));
 
     }
 
@@ -150,5 +147,6 @@ public class Field {
 
         return countFreeCell;
     }
+
 
 }

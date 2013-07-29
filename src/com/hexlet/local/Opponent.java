@@ -15,7 +15,7 @@ public class Opponent {
 
         // Если у Игрока есть 2 совпадение из 3
         if (countOfCharInLine(field, Main.charOfOpponent) != -1) {
-            for (int i=0; i<3; i++) {
+            for (int i=0; i<field.getFieldLenth(); i++) {
                 if (field.getCharToField(Field.winCombinations[countOfCharInLine(field, Main.charOfOpponent)][i]) == Field.DEFAULT_CHAR) {
                     field.setCharToField(Field.winCombinations[countOfCharInLine(field, Main.charOfOpponent)][i],Main.charOfOpponent);
                     break;
@@ -26,7 +26,7 @@ public class Opponent {
         // Если у компьютера есть 2 совпадения из 3
 
                 if (countOfCharInLine(field, Main.charOfPlayer) != -1) {
-                    for (int i=0; i<3; i++) {
+                    for (int i=0; i<field.getFieldLenth(); i++) {
 
                         if (field.getCharToField(Field.winCombinations[countOfCharInLine(field, Main.charOfPlayer)][i]) == Field.DEFAULT_CHAR) {
                             field.setCharToField(Field.winCombinations[countOfCharInLine(field, Main.charOfPlayer)][i],Main.charOfOpponent);
@@ -37,7 +37,7 @@ public class Opponent {
 
                 while (true) {
                     Random random = new Random();
-                    int numberField = random.nextInt(8);
+                    int numberField = random.nextInt(field.numberOfFields()-1);
                     if (Field.checkFieldsNumber(numberField, field)) {
                         field.setCharToField(numberField,Main.charOfOpponent);
                         break;
@@ -51,8 +51,8 @@ public class Opponent {
 
     private static int countOfCharInLine(Field field, char currectChar) {
 
-        for (int i=0; i<8; i++) {
-            if (field.countCharCell(currectChar)[i] == 2) {
+        for (int i=0; i<field.numberOfFields()-1; i++) {
+            if (field.countCharCell(currectChar)[i] == field.getFieldLenth()-1) {
                 return i;
             }
         }
